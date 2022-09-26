@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Share</title>
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="apple-mobile-web-app-title" content="FileShare">
+    <meta name="description" content="Share images, videos, PDFs with devices on your local network.">
+    <meta name="keywords" content="File, Transfer, Share, Peer2Peer">
+    <link rel="icon" sizes="96x96" href="images/fileshare96x96.png">
+    <link rel="shortcut icon" href="images/fileshare96x96.png">
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <main>
+        <header class="row-reverse">
+            <a id="change-theme" href="#" class="icon-button" title="Switch Darkmode/Lightmode">
+                <svg class="light-icon icon" stroke="currentColor" fill="currentColor" stroke-width="0"
+                    viewBox="0 0 512 512" aria-hidden="true" focusable="false" height="1em" width="1em"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5l-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6 0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0-49.9-49.9-49.9-131.1 0-181 49.9-49.9 131.1-49.9 181 0 49.9 49.9 49.9 131.1 0 181z">
+                    </path>
+                </svg>
+                <svg class="dark-icon icon" stroke="currentColor" fill="currentColor" stroke-width="0"
+                    viewBox="0 0 512 512" aria-hidden="true" focusable="false" height="1em" width="1em"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M283.211 512c78.962 0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954 0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156 0 0 0 283.211 0c-141.309 0-256 114.511-256 256 0 141.309 114.511 256 256 256z">
+                    </path>
+                </svg>
+            </a>
+        </header>
+        <section class="other-devices">
+            <div class="transfering hide">
+                <p class="file"></p>
+                <div class="peer">
+                    <div class="peer-img">
+                        <img src="" />
+                    </div>
+                    <div class="peer-name">
+                        <h6></h6>
+                        <h4></h4>
+                    </div>
+                </div>
+                <div class="progress"><span></span></div>
+            </div>
+        </section>
+        <section id="my-device" class="my-device">
+            <div class="image-container"><img src="" alt="device image" />
+                <div class="sonar-container"></div>
+                <div class="scaner-container">
+                    <div class="scaner"></div>
+                </div>
+            </div>
+            <h4></h4>
+            <input type="file" name="photo" id="pervent-files" multiple="multiple" hidden />
+            <label for="pervent-files" class="btn">Prevent Duplicate</label>
+            <h5>0 Seletcted File</h5>
+            <a id="download"></a>
+        </section>
+    </main>
+    <script src="bundle.js"></script>
+</body>
+
+</html>

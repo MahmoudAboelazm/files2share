@@ -1,0 +1,46 @@
+{
+  "name": "FileShare",
+  "short_name": "FileShare",
+  "icons": [
+    {
+      "src": "./images/fileshare192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/fileshare512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/fileshare192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./images/fileshare512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./images/fileshare96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "background_color": "#efefef",
+  "start_url": "/",
+  "display": "minimal-ui",
+  "theme_color": "#5865F2",
+  "share_target": {
+    "method": "GET",
+    "action": "/?share_target",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

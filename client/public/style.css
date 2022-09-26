@@ -1,0 +1,327 @@
+:root {
+    --bg-dark: #16151e;
+    --bg-primary: #5865F2;
+    --bg-dark-200: #191924; 
+    --bg-light: #fff;
+    --bg-light-200: #F7FAFC;
+    --icon-size: 20px;
+    --text-light-color: #2d3748;
+    --text-dark-color: #edf2f7;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --border-color: #29292a
+}
+
+html,
+body {
+    height: 100%;
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: currentColor;
+    cursor: pointer;
+}
+
+body {
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-light-200);
+    color: var(--text-light-color);
+    
+}
+
+body.dark {
+    background-color: var(--bg-dark);
+    color: var(--text-dark-color);
+}
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    height: 100%;
+
+}
+
+header {
+    align-items: center;
+    padding: 16px;
+    width: 100%;
+}
+
+.light-icon {
+    display: none;
+}
+
+.dark .dark-icon {
+    display: none;
+}
+
+.dark .light-icon {
+    display: block;
+}
+
+.row-reverse {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    fill: currentColor;
+}
+
+.icon-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 300ms;
+}
+
+
+.icon-button:hover:before {
+    opacity: 0.1;
+}
+
+.icon-button:focus:before {
+    opacity: 0.2;
+}
+
+.icon-button {
+    width: 40px;
+    height: 40px;
+}
+
+.icon-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    touch-action: manipulation;
+    border: none;
+    outline: none;
+}
+
+.icon-button:before {
+    border-radius: 50%;
+}
+
+/************* Background animation **************/
+
+.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+.sonar {
+    z-index: -1;
+    border-radius: 50%;
+    position: absolute;
+    display: block;
+    border: 1px solid var(--border-color);
+    opacity: .2;
+}
+.dark .sonar{
+    opacity: .8;
+}
+.scaner-container{
+    /* transform: rotate(180deg); */
+    animation: grow 7s linear infinite;
+    position: absolute;
+    z-index: -11;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+.scaner{
+    width: 20vh;
+    height: 45vh;
+    bottom: 50%;
+    left: 50%;
+    position: absolute;
+    background-image: linear-gradient(0deg, var(--bg-primary) 0%, rgba(0, 0, 0, 0) 100% );
+    clip-path: polygon(100% 0, 0% 100%, 0% 0%, 0 100%, 0 0);
+    opacity: .2;
+}
+
+@keyframes grow {
+    0% {
+        transform: rotate(0deg);
+
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media screen and (min-width: 100vh) {
+    .scaner {
+        height: 48vw;
+    }
+}
+
+
+/*********************** My Device ***************************/
+
+.my-device {
+    position: relative;
+    margin-top: auto;
+    margin-bottom: 10px;
+    background-color: var(--bg-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
+    width: calc(100% - 1rem);
+    max-width: 540px;
+    border-radius: var(--icon-size);
+    box-shadow: var(--shadow);
+    
+}
+.dark .my-device{
+    background-color: var(--bg-dark-200);
+}
+.image-container {
+    height: 80px;
+    width: 80px;
+    background: #29292a;
+    position: absolute;
+    top: -25%;
+    border-radius: 50%;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: var(--shadow);
+}
+
+.my-device h4 {
+    margin: 2rem 0 .8rem 0;
+}
+
+.btn {
+    background-color: var(--bg-primary);
+    border: none;
+    cursor: pointer;
+    margin: 10px 0px;
+    border-radius: .3rem;
+    padding: 12px 24px;
+    box-shadow: var(--shadow);
+    font-size: .9rem;
+    font-weight: bold;
+    color: var(--text-dark-color);
+}
+
+h5 {
+    color: var(--bg-primary)
+}
+
+/*************************** Other Peers ********************************/
+
+.other-devices {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    overflow-y: auto;
+}
+
+
+.other-devices .peer-container {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.other-devices .peer-container div {
+    height: 80px;
+    width: 80px;
+    background: #29292a;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+}
+
+.other-devices h4 {
+    margin-top: .5rem;
+}
+
+/****************** Transfering *********************/
+.transfering {
+    position: absolute;
+    max-width: 540px;
+    background-color: var(--bg-light);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-radius: var(--icon-size);
+    width: calc(100% - 1rem);
+    max-width: 540px;
+    margin: 1rem;
+    display: block;
+    z-index: 100;
+}
+
+.transfering.hide{
+    z-index: -1;
+    visibility: hidden;
+}
+
+.dark .transfering {
+    background-color: var(--bg-dark-200);
+
+}
+
+.transfering .file {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.transfering .peer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.transfering .peer .peer-img {
+    width: 50px;
+    height: 50px;
+    margin-right: 8px;
+}
+
+.transfering .progress {
+    height: 3px;
+    background-color: #e4e7e9;
+    border-radius: 15px;
+}
+
+.dark .transfering .progress {
+    background-color: var(--bg-dark);
+}
+
+.transfering .progress span {
+    display: block;
+    width: 20%;
+    background-color: var(--bg-primary);
+    height: 100%;
+}
