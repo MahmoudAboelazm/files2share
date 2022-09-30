@@ -13,9 +13,6 @@ import { Device, Network, Notifiy, PeerSignal } from "./types";
 const images = [
   "https://res.cloudinary.com/mou/image/upload/v1663759959/voices/kxkd5bq5daqc78foqla5.jpg",
   "https://res.cloudinary.com/mou/image/upload/v1663759273/voices/gxfxhpvi1wyvc5ykqhza.jpg",
-  "https://res.cloudinary.com/mou/image/upload/v1663759394/voices/qidp81pienevufgf4aep.jpg",
-  "https://res.cloudinary.com/mou/image/upload/v1663759509/voices/jqmmstvhwb1bb85vjf3u.jpg",
-  "https://res.cloudinary.com/mou/image/upload/v1663759667/voices/qwm1m8kqgyywtysnysqc.jpg",
 ];
 let nextImgIDX = 0;
 
