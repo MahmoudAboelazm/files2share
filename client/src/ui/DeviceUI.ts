@@ -49,7 +49,6 @@ export class DeviceUI {
     download.target = "_blank";
     download.click();
     URL.revokeObjectURL(url);
-    this.transferCompleted();
   }
 
   transferCompleted() {

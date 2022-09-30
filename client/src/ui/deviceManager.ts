@@ -90,9 +90,10 @@ export class DeviceManager {
     this.dequeueFile();
   }
 
-  private fileReceived(file: FileReceived) {
+  private fileReceived(file?: FileReceived) {
     this.busyObserver.next(false);
-    this.deviceUI.downloadFile(file);
+    this.deviceUI.transferCompleted();
+    if (file) this.deviceUI.downloadFile(file);
     this.peer.emit("transfer-completed");
   }
 
