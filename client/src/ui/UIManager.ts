@@ -25,7 +25,7 @@ export default class UIManager {
   }
 
   serverConnect() {
-    const url = process.env.URL as string;
+    const url = process.env.SERVER_URL as string;
     const server = new ServerConnection(url);
     server.on("network-devices", (data: Devices) => this.networkDevices(data));
     server.on("new-device", (data: ServerDevice) => this.newDevice(data));
