@@ -325,3 +325,9 @@ h5 {
     background-color: var(--bg-primary);
     height: 100%;
 }
+
+.transfering .progress h6 {
+    text-align: right;
+    top: -20px;
+    position: relative;
+}

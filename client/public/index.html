@@ -7,12 +7,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Share</title>
+    <meta name="theme-color" content="#FFF">
+
     <meta name="apple-mobile-web-app-capable" content="no">
     <meta name="apple-mobile-web-app-title" content="FileShare">
     <meta name="description" content="Share images, videos, PDFs with devices on your local network.">
     <meta name="keywords" content="File, Transfer, Share, Peer2Peer">
-    <link rel="icon" sizes="96x96" href="images/fileshare96x96.png">
-    <link rel="shortcut icon" href="images/fileshare96x96.png">
+    <link rel="icon" sizes="16x16" href="images/fileshare16x16.png">
+    <link rel="shortcut icon" href="images/fileshare72x72.png">
+    <link rel="apple-touch-icon" href="images/fileshare72x72.png">
     <link rel="stylesheet" type="text/css" href="./style.css">
     <link rel="manifest" href="manifest.json">
 </head>
@@ -49,23 +52,28 @@
                         <h4></h4>
                     </div>
                 </div>
-                <div class="progress"><span></span></div>
+                <div class="progress">
+                    <span></span>
+                    <h6></h6>
+                </div>
             </div>
         </section>
         <section id="my-device" class="my-device">
-            <div class="image-container"><img src="" alt="device image" />
+            <div class="image-container"><img src="./images/fileshare96x96.png" alt="device image" />
                 <div class="sonar-container"></div>
                 <div class="scaner-container">
                     <div class="scaner"></div>
                 </div>
             </div>
             <h4></h4>
-            <input type="file" name="photo" id="pervent-files" multiple="multiple" hidden />
-            <label for="pervent-files" class="btn">Prevent Duplicate</label>
-            <h5>0 Seletcted File</h5>
+            <input type="file" id="pervent-files" multiple="multiple" hidden />
+            <label for="pervent-files" class="btn" title="Prevent transfer files already exist on your device">Prevent
+                Duplicate</label>
+            <h5 title="Prevent duplicate files count">0 Seletcted File</h5>
             <a id="download"></a>
         </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
     <script src="bundle.js"></script>
 </body>
 

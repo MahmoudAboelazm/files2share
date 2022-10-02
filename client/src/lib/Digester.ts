@@ -18,11 +18,13 @@ export class Digester {
     this.size = meta.size;
     this.mime = meta.mime || "application/octet-stream";
     this.name = meta.name;
-    const fileStream = streamSaver.createWriteStream(meta.name, {
-      size: meta.size,
-    });
-    this.writer = fileStream.getWriter();
     const isBigFile = meta.size > 1024 * 1024 * 50; // Max file size to use normal digester is 50 MB. Otherwise, act as a server while transferring!
+    if (isBigFile) {
+      const fileStream = streamSaver.createWriteStream(meta.name, {
+        size: meta.size,
+      });
+      this.writer = fileStream.getWriter();
+    }
     this.buffer = this.bufferInit(isBigFile);
   }
 

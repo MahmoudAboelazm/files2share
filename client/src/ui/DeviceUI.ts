@@ -12,6 +12,8 @@ const transferFileName = transferContainer.children[0] as HTMLParagraphElement;
 const transferDevice = transferContainer.children[1];
 const transferProgress = transferContainer.children[2]
   .children[0] as HTMLSpanElement;
+const transferText = transferContainer.children[2]
+  .children[1] as HTMLSpanElement;
 
 const transferDeviceImg = transferDevice.children[0]
   .children[0] as HTMLImageElement;
@@ -32,7 +34,8 @@ export class DeviceUI {
   }
 
   progress(progress: number) {
-    transferProgress.style.width = `${progress}%`;
+    transferProgress.style.width = `${progress.toFixed(1)}%`;
+    transferText.innerText = `${progress.toFixed(1)}%`;
   }
 
   currentTransfer(meta: FileMeta) {

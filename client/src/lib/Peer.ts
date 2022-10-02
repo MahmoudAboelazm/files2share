@@ -8,7 +8,9 @@ export class Peer {
 
   constructor({ initiator }: Options) {
     this.options = { initiator };
-    this.peer = new RTCPeerConnection();
+    this.peer = new RTCPeerConnection({
+      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+    });
     initiator
       ? this.createChannel()
       : (this.peer.ondatachannel = (e) => this.channelOpened(e.channel));
