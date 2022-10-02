@@ -114,10 +114,9 @@ const expressInit = async () => {
   };
 
   const onDeviceLeave = (req: Request, ip: string) => {
-    req.on("error", () => {
+    req.on("close", () => {
       const { id } = req.params;
       const network = networks.get(ip);
-
       if (network) {
         network.connectedDevices = network.connectedDevices.filter(
           (d) => d.id !== id,
