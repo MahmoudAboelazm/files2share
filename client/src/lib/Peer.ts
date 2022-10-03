@@ -5,6 +5,7 @@ export class Peer {
   private peer: RTCPeerConnection;
   private onEvent: OnEvent = { onChunk: Function, onConnection: Function };
   private channel: RTCDataChannel;
+  private signalCreated: boolean;
 
   constructor({ initiator }: Options) {
     this.options = { initiator };
@@ -18,12 +19,12 @@ export class Peer {
 
   private createChannel() {
     const channel = this.peer.createDataChannel("dataChannel");
-    channel.binaryType = "arraybuffer";
     channel.onopen = () => this.channelOpened(channel);
   }
 
   private channelOpened(channel: RTCDataChannel) {
     channel.onmessage = (e) => this.onMessage(e.data);
+    channel.binaryType = "arraybuffer";
     this.channel = channel;
     this.onEvent["onConnection"]();
   }
@@ -42,12 +43,14 @@ export class Peer {
     this.peer
       .createOffer()
       .then((offer) => this.peer.setLocalDescription(offer));
+    this.signalCreated = true;
   }
 
   private answerSignal() {
     this.peer
       .createAnswer()
       .then((answer) => this.peer.setLocalDescription(answer));
+    this.signalCreated = true;
   }
 
   private onIceCandidate(signalCallBack: Signal) {
@@ -63,13 +66,19 @@ export class Peer {
 
   onSignal(fn: Signal) {
     this.onIceCandidate(fn);
-    this.options.initiator ? this.offerSignal() : this.answerSignal();
+    if (!this.signalCreated)
+      this.options.initiator ? this.offerSignal() : this.answerSignal();
   }
 
   async setSignal(signal: SignalType) {
     try {
-      if (signal.sdp)
+      if (
+        signal.sdp &&
+        this.peer.connectionState !== "connected" &&
+        this.peer.iceConnectionState !== "connected"
+      )
         this.peer.setRemoteDescription(new RTCSessionDescription(signal.sdp));
+
       if (signal.candidate)
         this.peer.addIceCandidate(new RTCIceCandidate(signal.candidate));
     } catch (error: any) {
