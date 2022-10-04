@@ -10,6 +10,8 @@ export class Chunker {
   private file: File;
   private onChunkEvent: (chunk: ArrayBuffer) => any;
   private onPartitionEvent: () => any;
+  progress = 0;
+  private bytesSent = 0;
 
   constructor(file: File) {
     this.chunkSize = 64000; // 64 KB
@@ -49,6 +51,9 @@ export class Chunker {
   private onChunkRead(chunk: ArrayBuffer) {
     this.offset += chunk.byteLength;
     this.partitionSize += chunk.byteLength;
+    this.bytesSent += chunk.byteLength;
+    this.progress = (this.bytesSent / this.file.size) * 100;
+
     this.onChunkEvent(chunk);
     if (this.isFileEnd()) return;
     if (this.isPartitionEnd()) {

@@ -51,7 +51,6 @@ export class DeviceManager {
     this.peer.on("file-head", (meta) => this.fileHead(meta));
     this.peer.on("partition", () => this.peer.emit("partition-received"));
     this.peer.on("partition-received", () => this.chunker.nextPartition());
-    this.peer.on("progress", (progress) => this.deviceUI.progress(progress));
     this.peer.on("transfer-completed", () => this.transferCompleted());
   }
 
@@ -79,7 +78,10 @@ export class DeviceManager {
     const chunker = new Chunker(file);
     this.deviceUI.currentTransfer(meta);
     this.deviceUI.statusSending();
-    chunker.onChunk((chunk) => this.peer.sendChunk(chunk));
+    chunker.onChunk((chunk) => {
+      this.peer.sendChunk(chunk);
+      this.deviceUI.progress(this.chunker.progress);
+    });
     chunker.onPartition(() => this.peer.emit("partition"));
     this.chunker = chunker;
     this.peer.emit("file-head", meta);
@@ -101,7 +103,6 @@ export class DeviceManager {
     this.digister.unchunk(chunk);
     const progress = this.digister.progress;
     this.deviceUI.progress(progress);
-    this.peer.emit("progress", progress);
   }
 
   private fileHead(meta: FileMeta) {

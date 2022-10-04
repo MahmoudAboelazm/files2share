@@ -34,8 +34,9 @@ export class DeviceUI {
   }
 
   progress(progress: number) {
-    transferProgress.style.width = `${progress.toFixed(1)}%`;
-    transferText.innerText = `${progress.toFixed(1)}%`;
+    const fixed = progress.toFixed(1);
+    transferProgress.style.width = `${fixed}%`;
+    transferText.innerText = `${fixed}%`;
   }
 
   currentTransfer(meta: FileMeta) {
