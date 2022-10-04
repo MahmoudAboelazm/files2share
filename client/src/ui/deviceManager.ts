@@ -142,6 +142,7 @@ export class DeviceManager {
   }
 
   destroy() {
+    if (this.peer.isConnectionStable()) return; // in case the server lost connection for any reason but peer still exist
     this.peer.close();
     this.deviceUI.remove();
   }

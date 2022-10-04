@@ -55,7 +55,7 @@ export class Peer {
 
   private onIceCandidate(signalCallBack: Signal) {
     this.peer.onicecandidate = (e) => {
-      if (e.candidate) {
+      if (e.candidate && !this.isConnectionStable()) {
         signalCallBack({
           sdp: this.peer.localDescription,
           candidate: e.candidate,
@@ -91,11 +91,12 @@ export class Peer {
   }
 
   emit(msg: string, data?: any) {
-    if (this.channel) this.channel.send(JSON.stringify({ msg, data }));
+    if (this.isConnectionStable())
+      this.channel.send(JSON.stringify({ msg, data }));
   }
 
   sendChunk(chunk: ArrayBuffer) {
-    if (this.channel) this.channel.send(chunk);
+    if (this.isConnectionStable()) this.channel.send(chunk);
   }
 
   onChunk(fnCallBack: (data: Buffer) => void) {
@@ -104,6 +105,10 @@ export class Peer {
 
   onConnection(fnCallBack: () => void) {
     this.onEvent["onConnection"] = fnCallBack;
+  }
+
+  isConnectionStable() {
+    return this.channel && this.channel.readyState == "open";
   }
 
   close() {
