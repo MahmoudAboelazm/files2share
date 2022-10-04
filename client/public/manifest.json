@@ -35,6 +35,7 @@
       "purpose": "maskable"
     }
   ],
+  "display": "minimal-ui",
   "background_color": "#efefef",
   "start_url": "/",
   "scope": "/",
