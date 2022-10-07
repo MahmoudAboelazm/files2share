@@ -8,13 +8,8 @@ import {
 } from "unique-names-generator";
 import { CLIENT_URL, PORT } from "./config/constants";
 import { Device, Network, Notifiy, PeerSignal } from "./types";
-
-// images should be changed, its for testing, it could be changed in the future with better ones
-const images = [
-  "https://res.cloudinary.com/mou/image/upload/v1663759959/voices/kxkd5bq5daqc78foqla5.jpg",
-  "https://res.cloudinary.com/mou/image/upload/v1663759273/voices/gxfxhpvi1wyvc5ykqhza.jpg",
-];
-let nextImgIDX = 0;
+import { createAvatar } from "@dicebear/avatars";
+import * as style from "@dicebear/adventurer-neutral";
 
 const expressInit = async () => {
   ////////////////////////////////////////////////////////
@@ -39,8 +34,15 @@ const expressInit = async () => {
 
     const randomName = uniqueNamesGenerator({
       dictionaries: [adjectives, animals],
+      separator: " ",
     });
-    nextImgIDX = nextImgIDX + 1 >= images.length ? 0 : nextImgIDX + 1;
+
+    const imgURL = createAvatar(style, {
+      seed: randomName,
+      dataUri: true,
+      size: 80,
+    });
+
     return {
       name: randomName,
       model: ua.device.model
@@ -52,7 +54,7 @@ const expressInit = async () => {
       browser: ua.browser.name,
       type: ua.device.type,
       vendor: ua.device.vendor,
-      imgURL: images[nextImgIDX],
+      imgURL,
     };
   };
 
@@ -68,6 +70,8 @@ const expressInit = async () => {
       "Cache-Control": "no-cache",
       "Content-Type": "text/event-stream",
       Connection: "keep-alive",
+      "Access-Control-Allow-Origin": "*",
+      "X-Accel-Buffering": "no",
     });
     res.flushHeaders();
   };
@@ -112,21 +116,23 @@ const expressInit = async () => {
       });
     }
   };
+  const onClose = (req: Request, ip: string) => {
+    const { id } = req.params;
+    const network = networks.get(ip);
+    if (network) {
+      network.connectedDevices = network.connectedDevices.filter(
+        (d) => d.id !== id,
+      );
+      network.connectedDevices.forEach((d) =>
+        emitSSE(d.res, { msg: "device-left", id }),
+      );
+      if (network.connectedDevices.length == 0) networks.delete(ip);
+    }
+  };
 
   const onDeviceLeave = (req: Request, ip: string) => {
-    req.on("close", () => {
-      const { id } = req.params;
-      const network = networks.get(ip);
-      if (network) {
-        network.connectedDevices = network.connectedDevices.filter(
-          (d) => d.id !== id,
-        );
-        network.connectedDevices.forEach((d) =>
-          emitSSE(d.res, { msg: "device-left", id }),
-        );
-        if (network.connectedDevices.length == 0) networks.delete(ip);
-      }
-    });
+    req.on("close", () => onClose(req, ip));
+    req.on("error", () => onClose(req, ip));
   };
 
   const onPeerSignal = (req: Request, network: Network) => {
