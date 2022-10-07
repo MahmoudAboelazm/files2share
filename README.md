@@ -1,8 +1,8 @@
 # Files2share
 
-<a href="https://files2share.netlify.app/" target="_blank">Files2share</a> a web
-app for sharing the files between the devices on your local network without
-uploading them to any server, it's peer to peer using WebRTC.
+<a href="https://files2share.netlify.app/" target="_blank">Files2share</a> is a
+web app for sharing files between the devices on your local network without
+uploading them to any server, it's peer-to-peer using WebRTC.
 
 > Inspired by
 > <a href="https://github.com/RobinLinus/snapdrop" target="_blank">Snapdrop</a>
