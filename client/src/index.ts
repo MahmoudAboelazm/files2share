@@ -13,4 +13,5 @@ ui.serverConnect();
  * 5- show if the device is busy
  * 6- add more to prevent duplicate
  * 7- remove all prevent duplicates files
+ * 8- option to select the avatar & the name in the client side instead of sending them from the backend
  */

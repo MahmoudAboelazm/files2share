@@ -47,6 +47,7 @@ export class DeviceManager {
 
   private listenToPeerEvents() {
     this.peer.onConnection(() => this.deviceUI.show());
+    this.peer.onClose(() => this.destroy());
     this.peer.onChunk((chunk) => this.chunkReceived(chunk));
     this.peer.on("file-head", (meta) => this.fileHead(meta));
     this.peer.on("partition", () => this.peer.emit("partition-received"));
@@ -144,6 +145,10 @@ export class DeviceManager {
 
   destroy() {
     if (this.peer.isConnectionStable()) return; // in case the server lost connection for any reason but peer still exist
+    if (this.busy) {
+      this.busyObserver.next(false);
+      this.deviceUI.transferCompleted(); // TODO: show error
+    }
     this.peer.close();
     this.deviceUI.remove();
   }
