@@ -12,6 +12,7 @@ import {
 } from "unique-names-generator";
 import { Observable } from "../lib/Observable";
 import { useLocalStorage } from "./theme";
+import { MyDeviceInfo } from "../types";
 
 const avatarStyles: { [key: string]: any } = {
   adventurer,
@@ -27,9 +28,9 @@ export class UISettings {
   private parentOptions: Element;
   private avatarStyle: string;
   private avatarName: string;
-  private settingsObserver: Observable;
+  private settingsObserver: Observable<MyDeviceInfo>;
 
-  constructor(ob: Observable) {
+  constructor(ob: Observable<MyDeviceInfo>) {
     this.settingsObserver = ob;
   }
   init() {

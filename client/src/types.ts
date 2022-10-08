@@ -59,8 +59,8 @@ export interface DeviceManagerOptions {
   initiator: boolean;
   device: Device;
   id: string;
-  duplicates: Observable;
-  busy: Observable;
+  duplicates: Observable<Map<string, boolean>>;
+  busy: Observable<boolean>;
   myDeviceInfo: MyDeviceInfo;
 }
 export interface MyDeviceInfo {

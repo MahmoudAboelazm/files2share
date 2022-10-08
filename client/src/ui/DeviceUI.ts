@@ -25,10 +25,10 @@ const transferDeviceStatus = transferDevice.children[1]
 
 ////////////////////////////////////////////////////
 export class DeviceUI {
-  filesObserver: Observable;
+  filesObserver: Observable<File[]>;
   container: HTMLElement;
   device: Device;
-  constructor(observer: Observable, device: Device) {
+  constructor(observer: Observable<File[]>, device: Device) {
     this.filesObserver = observer;
     this.device = device;
   }

@@ -1,13 +1,13 @@
-export class Observable {
+export class Observable<Type> {
   private observers: Function[] = [];
-  value: any;
+  value: Type;
   constructor() {}
 
-  next(value: any) {
+  next(value: Type) {
     this.value = value;
     this.observers.forEach((observer) => observer(value));
   }
-  subscribe(fn: (value: any) => any) {
+  subscribe(fn: (value: Type) => void) {
     this.observers.push(fn);
   }
   unsubscribe() {

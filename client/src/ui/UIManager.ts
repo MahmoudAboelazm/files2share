@@ -15,10 +15,10 @@ import { UISettings } from "./UISettings";
 export default class UIManager {
   private devices: Map<string, DeviceManager>;
   private server: ServerConnection;
-  private preventDuplicates: Observable;
+  private preventDuplicates: Observable<Map<string, boolean>>;
   private myDeviceDom: Element;
-  private deviceBusy: Observable;
-  private settingsObserver: Observable;
+  private deviceBusy: Observable<boolean>;
+  private settingsObserver: Observable<MyDeviceInfo>;
 
   constructor() {
     this.devices = new Map();
@@ -74,7 +74,7 @@ export default class UIManager {
   private myDevice(device: Device) {
     const img = this.myDeviceDom.children[0].children[0] as HTMLImageElement;
     const name = this.myDeviceDom.children[2] as HTMLElement;
-    const settingsObserver = new Observable();
+    const settingsObserver: Observable<MyDeviceInfo> = new Observable();
     settingsObserver.subscribe(({ randomName, imgURL }: MyDeviceInfo) => {
       (img.src = imgURL), (name.innerText = randomName);
     });

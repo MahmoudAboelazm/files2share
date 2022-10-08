@@ -22,7 +22,7 @@ export class DeviceManager {
   private digister: Digester;
   private chunker: Chunker;
   private busy: boolean;
-  private busyObserver: Observable;
+  private busyObserver: Observable<boolean>;
   private transferring: boolean;
   private myDeviceInfo: MyDeviceInfo;
   private device: Device;
@@ -76,7 +76,7 @@ export class DeviceManager {
   }
 
   private deviceInit(device: Device) {
-    const observer = new Observable();
+    const observer: Observable<File[]> = new Observable();
     observer.subscribe((files) => this.setFiles(files));
     this.deviceUI = new DeviceUI(observer, device);
   }
