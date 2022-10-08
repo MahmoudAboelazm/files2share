@@ -1,14 +1,16 @@
 :root {
     --bg-dark: #16151e;
     --bg-primary: #5865F2;
-    --bg-dark-200: #191924; 
+    --bg-dark-200: #191924;
     --bg-light: #fff;
     --bg-light-200: #F7FAFC;
     --icon-size: 20px;
     --text-light-color: #2d3748;
     --text-dark-color: #edf2f7;
+    --icon-color:#767786;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --border-color: #29292a
+    --border-color: #29292a;
+    --hover-color:#3e3e3e29;
 }
 
 html,
@@ -31,14 +33,15 @@ body {
     font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-light-200);
     color: var(--text-light-color);
-    
+
 }
 
 body.dark {
     background-color: var(--bg-dark);
     color: var(--text-dark-color);
 }
-main{
+
+main {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -74,6 +77,7 @@ header {
     width: var(--icon-size);
     height: var(--icon-size);
     fill: currentColor;
+    color: var(--icon-color);
 }
 
 .icon-button:before {
@@ -133,11 +137,12 @@ header {
     border: 1px solid var(--border-color);
     opacity: .2;
 }
-.dark .sonar{
+
+.dark .sonar {
     opacity: .8;
 }
-.scaner-container{
-    /* transform: rotate(180deg); */
+
+.scaner-container {
     animation: grow 7s linear infinite;
     position: absolute;
     z-index: -11;
@@ -145,13 +150,14 @@ header {
     height: 100%;
     top: 0;
 }
-.scaner{
+
+.scaner {
     width: 20vh;
     height: 45vh;
     bottom: 50%;
     left: 50%;
     position: absolute;
-    background-image: linear-gradient(0deg, var(--bg-primary) 0%, rgba(0, 0, 0, 0) 100% );
+    background-image: linear-gradient(0deg, var(--bg-primary) 0%, rgba(0, 0, 0, 0) 100%);
     clip-path: polygon(100% 0, 0% 100%, 0% 0%, 0 100%, 0 0);
     opacity: .2;
 }
@@ -161,6 +167,7 @@ header {
         transform: rotate(0deg);
 
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -178,26 +185,24 @@ header {
 .my-device {
     position: relative;
     margin-top: auto;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
     background-color: var(--bg-light);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: 180px;
     width: calc(100% - 1rem);
-    max-width: 540px;
-    border-radius: var(--icon-size);
+    max-width: 490px;
+    border-radius: 10px;
     box-shadow: var(--shadow);
-    
+    padding: 15px;
 }
-.dark .my-device{
+
+.dark .my-device {
     background-color: var(--bg-dark-200);
 }
+
 .image-container {
-    height: 80px;
-    width: 80px;
-    background: #29292a;
     position: absolute;
     top: -25%;
     border-radius: 50%;
@@ -207,11 +212,12 @@ img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    box-shadow: var(--shadow);
+    /* box-shadow: var(--shadow); */
 }
 
 .my-device h4 {
-    margin: 2rem 0 .8rem 0;
+    position: relative;
+    margin: -1rem 0 1.5rem 0;
 }
 
 .btn {
@@ -228,9 +234,55 @@ img {
 }
 
 h5 {
-    color: var(--bg-primary)
+    color: var(--bg-primary);
+    opacity: 0.4;
 }
 
+/* ==================== Settings =========================== */
+.settings {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+}
+
+.options {
+    position: relative;
+}
+
+.options ul {
+    position: absolute;
+    bottom: 100%;
+    list-style: none;
+    left: 0;
+    margin: 0;
+    background-color: var(--bg-light);
+    padding:  0;
+    min-width: 10.5rem;
+    overflow: auto;
+    max-height: 50vh;
+    box-shadow: var(--shadow);
+}
+.options.hide ul{
+    visibility: hidden;
+    z-index: -11;
+
+}
+.dark .options ul{
+    background-color: var(--bg-dark-200);
+}
+.options ul li{
+    padding: .6rem ;
+    cursor: pointer;
+    font-size: 16px;
+}
+.options ul li:hover{
+    background-color: var(--hover-color)
+}
+.options ul li.active{
+    background-color: var(--hover-color)
+}
 /*************************** Other Peers ********************************/
 
 .other-devices {
@@ -253,18 +305,29 @@ h5 {
 }
 
 .other-devices .peer-container div {
-    height: 80px;
-    width: 80px;
-    background: #29292a;
     border-radius: 50%;
     cursor: pointer;
     position: relative;
+    animation: pop 600ms ease-out 1;
+    transition: all 0.3s;
 }
+.other-devices .peer-container div:hover{
+    transform: scale(1.1);
 
+}
 .other-devices h4 {
     margin-top: .5rem;
 }
 
+@keyframes pop {
+    0% {
+        transform: scale(0.7);
+    }
+
+    40% {
+        transform: scale(1.2);
+    }
+}
 /****************** Transfering *********************/
 .transfering {
     position: absolute;
@@ -274,13 +337,12 @@ h5 {
     box-shadow: var(--shadow);
     border-radius: var(--icon-size);
     width: calc(100% - 1rem);
-    max-width: 540px;
-    margin: 1rem;
+    max-width: 490px;
     display: block;
     z-index: 100;
 }
 
-.transfering.hide{
+.transfering.hide {
     z-index: -1;
     visibility: hidden;
 }

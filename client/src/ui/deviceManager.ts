@@ -8,6 +8,7 @@ import {
   FileReceived,
   DeviceManagerOptions,
   FileMeta,
+  MyDeviceInfo,
 } from "../types";
 import { DeviceUI } from "./DeviceUI";
 
@@ -22,12 +23,17 @@ export class DeviceManager {
   private chunker: Chunker;
   private busy: boolean;
   private busyObserver: Observable;
+  private transferring: boolean;
+  private myDeviceInfo: MyDeviceInfo;
+  private device: Device;
+
   constructor({
     initiator,
     duplicates,
     device,
     id,
     busy,
+    myDeviceInfo,
   }: DeviceManagerOptions) {
     this.checkDuplicates = duplicates.value;
     this.busy = busy.value;
@@ -37,6 +43,8 @@ export class DeviceManager {
     busy.subscribe((busy) => (this.busy = busy));
     this.deviceInit(device);
     this.peerInit(initiator);
+    this.myDeviceInfo = myDeviceInfo;
+    this.device = device;
   }
 
   private peerInit(initiator: boolean) {
@@ -46,13 +54,25 @@ export class DeviceManager {
   }
 
   private listenToPeerEvents() {
-    this.peer.onConnection(() => this.deviceUI.show());
+    this.peer.onConnection(() =>
+      this.peer.emit("deviceInfo", this.myDeviceInfo),
+    );
     this.peer.onClose(() => this.destroy());
     this.peer.onChunk((chunk) => this.chunkReceived(chunk));
+    this.peer.on("deviceInfo", (deviceInfo: MyDeviceInfo) =>
+      this.deviceInfo(deviceInfo),
+    );
     this.peer.on("file-head", (meta) => this.fileHead(meta));
     this.peer.on("partition", () => this.peer.emit("partition-received"));
     this.peer.on("partition-received", () => this.chunker.nextPartition());
     this.peer.on("transfer-completed", () => this.transferCompleted());
+  }
+
+  private deviceInfo(deviceInfo: MyDeviceInfo) {
+    this.device.imgURL = deviceInfo.imgURL;
+    this.device.name = deviceInfo.randomName;
+    this.deviceInit(this.device);
+    this.deviceUI.show();
   }
 
   private deviceInit(device: Device) {
@@ -86,9 +106,11 @@ export class DeviceManager {
     chunker.onPartition(() => this.peer.emit("partition"));
     this.chunker = chunker;
     this.peer.emit("file-head", meta);
+    this.transferring = true;
   }
 
   private transferCompleted() {
+    this.transferring = false;
     this.deviceUI.transferCompleted();
     this.dequeueFile();
   }
@@ -118,6 +140,7 @@ export class DeviceManager {
     this.digister.onFileReceived((file) => this.fileReceived(file));
     this.deviceUI.currentTransfer(meta);
     this.peer.emit("partition-received");
+    this.transferring = true;
   }
 
   //////////////// Connect peers ///////////////////
@@ -145,10 +168,10 @@ export class DeviceManager {
 
   destroy() {
     if (this.peer.isConnectionStable()) return; // in case the server lost connection for any reason but peer still exist
-    // if (this.busy) {
-    //   this.busyObserver.next(false);
-    //   this.deviceUI.transferCompleted(); // TODO: show error
-    // }
+    if (this.transferring) {
+      this.busyObserver.next(false);
+      this.deviceUI.transferCompleted(); // TODO: show error
+    }
     this.peer.close();
     this.deviceUI.remove();
   }

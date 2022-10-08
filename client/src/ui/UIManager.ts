@@ -5,10 +5,12 @@ import { addBackground, getTheme } from "./theme";
 import {
   Device,
   Devices,
+  MyDeviceInfo,
   ServerDevice,
   ServerSignal,
   SignalType,
 } from "../types";
+import { UISettings } from "./UISettings";
 
 export default class UIManager {
   private devices: Map<string, DeviceManager>;
@@ -16,6 +18,7 @@ export default class UIManager {
   private preventDuplicates: Observable;
   private myDeviceDom: Element;
   private deviceBusy: Observable;
+  private settingsObserver: Observable;
 
   constructor() {
     this.devices = new Map();
@@ -70,9 +73,16 @@ export default class UIManager {
 
   private myDevice(device: Device) {
     const img = this.myDeviceDom.children[0].children[0] as HTMLImageElement;
-    const name = this.myDeviceDom.children[1] as HTMLElement;
-    img.src = device.imgURL;
-    name.innerText = device.name;
+    const name = this.myDeviceDom.children[2] as HTMLElement;
+    const settingsObserver = new Observable();
+    settingsObserver.subscribe(({ randomName, imgURL }: MyDeviceInfo) => {
+      (img.src = imgURL), (name.innerText = randomName);
+    });
+    const uiSettings = new UISettings(settingsObserver);
+    uiSettings.init();
+
+    this.settingsObserver = settingsObserver;
+    device;
   }
 
   //// network devices connection ////////////////////////////////////////////////
@@ -84,6 +94,7 @@ export default class UIManager {
         id,
         duplicates: this.preventDuplicates,
         busy: this.deviceBusy,
+        myDeviceInfo: this.settingsObserver.value,
       });
       this.devices.set(id, deviceManager);
     });
@@ -96,6 +107,7 @@ export default class UIManager {
       id,
       duplicates: this.preventDuplicates,
       busy: this.deviceBusy,
+      myDeviceInfo: this.settingsObserver.value,
     };
     const deviceManager = new DeviceManager(config);
     deviceManager.createSignal({

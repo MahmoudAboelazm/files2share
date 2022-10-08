@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Files2share</title>
-    <meta name="theme-color" content="#FFF">
+    <meta name="theme-color" content="#5865F2">
 
     <meta name="apple-mobile-web-app-capable" content="no">
     <meta name="apple-mobile-web-app-title" content="Files2share">
@@ -59,11 +59,44 @@
             </div>
         </section>
         <section id="my-device" class="my-device">
-            <div class="image-container"><img src="./images/fileshare96x96.png" alt="device image" />
+            <div class="image-container">
+                <img src="./images/fileshare72x72.png" alt="device image" />
                 <div class="sonar-container"></div>
                 <div class="scaner-container">
                     <div class="scaner"></div>
                 </div>
+            </div>
+            <div class="settings">
+                <div class="options hide">
+                    <a href="#" class="icon icon-button" title="Change Device Image Style">
+                        <svg xmlns="http://www.w3.org/2000/svg" class=" icon-tabler icon-tabler-settings" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path
+                                d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z">
+                            </path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </a>
+                    <ul>
+                        <li dataId="adventurer">adventurer</li>
+                        <li dataId="adventurerNeutral">adventurer-neutral</li>
+                        <li dataId="avataaars">avataaars</li>
+                        <li dataId="bottts">bottts</li>
+                        <li dataId="initials">initials</li>
+                        <li dataId="openPeeps">open-peeps</li>
+                    </ul>
+                </div>
+                <a href="#" class="icon-button icon " title="Generate New Name & Image"><svg
+                        xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-refresh" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+                        <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+                    </svg>
+                </a>
             </div>
             <h4></h4>
             <input type="file" id="pervent-files" multiple="multiple" hidden />

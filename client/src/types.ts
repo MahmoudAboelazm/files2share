@@ -61,6 +61,11 @@ export interface DeviceManagerOptions {
   id: string;
   duplicates: Observable;
   busy: Observable;
+  myDeviceInfo: MyDeviceInfo;
+}
+export interface MyDeviceInfo {
+  imgURL: string;
+  randomName: string;
 }
 
 export interface FileMeta {
