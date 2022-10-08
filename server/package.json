@@ -8,14 +8,11 @@
     "dev": "nodemon dist/index.js"
   },
   "dependencies": {
-    "@dicebear/adventurer-neutral": "^4.10.5",
-    "@dicebear/avatars": "^4.10.5",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "typescript": "^4.7.4",
-    "ua-parser-js": "^1.0.2",
-    "unique-names-generator": "^4.7.1"
+    "ua-parser-js": "^1.0.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

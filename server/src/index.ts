@@ -1,15 +1,8 @@
 import cors from "cors";
 import express, { Request, Response } from "express";
 import uaParser from "ua-parser-js";
-import {
-  adjectives,
-  animals,
-  uniqueNamesGenerator,
-} from "unique-names-generator";
 import { CLIENT_URL, PORT } from "./config/constants";
 import { Device, Network, Notifiy, PeerSignal } from "./types";
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/adventurer-neutral";
 
 const expressInit = async () => {
   ////////////////////////////////////////////////////////
@@ -32,19 +25,8 @@ const expressInit = async () => {
   const getDeviceInfo = (request: Request): Device => {
     let ua = uaParser(request.headers["user-agent"]);
 
-    const randomName = uniqueNamesGenerator({
-      dictionaries: [adjectives, animals],
-      separator: " ",
-    });
-
-    const imgURL = createAvatar(style, {
-      seed: randomName,
-      dataUri: true,
-      size: 80,
-    });
-
     return {
-      name: randomName,
+      name: "",
       model: ua.device.model
         ? ua.device.model
         : ua.browser.name
@@ -54,7 +36,7 @@ const expressInit = async () => {
       browser: ua.browser.name,
       type: ua.device.type,
       vendor: ua.device.vendor,
-      imgURL,
+      imgURL: "",
     };
   };
 
