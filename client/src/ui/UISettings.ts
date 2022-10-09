@@ -94,7 +94,7 @@ export class UISettings {
 
   private generateDeviceInfo() {
     const size = this.avatarStyle == "adventurer" ? 75 : 65;
-    const imgURL = `https://avatars.dicebear.com/api/${this.avatarStyle}/${this.avatarName}.png?size=${size}`;
+    const imgURL = `https://avatars.dicebear.com/api/${this.avatarStyle}/${this.avatarName}.svg?size=${size}`;
     this.settingsObserver.next({ randomName: this.avatarName, imgURL });
   }
 
