@@ -17,13 +17,6 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@dicebear/adventurer": "^4.10.5",
-    "@dicebear/adventurer-neutral": "^4.10.5",
-    "@dicebear/avatars": "^4.10.5",
-    "@dicebear/avatars-avataaars-sprites": "^4.10.5",
-    "@dicebear/avatars-bottts-sprites": "^4.10.5",
-    "@dicebear/avatars-initials-sprites": "^4.10.5",
-    "@dicebear/open-peeps": "^4.10.5",
     "streamsaver": "^2.0.5",
     "unique-names-generator": "^4.7.1"
   }

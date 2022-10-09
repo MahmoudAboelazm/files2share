@@ -1,10 +1,3 @@
-import * as adventurer from "@dicebear/adventurer";
-import * as adventurerNeutral from "@dicebear/adventurer-neutral";
-import * as avataaars from "@dicebear/avatars-avataaars-sprites";
-import * as bottts from "@dicebear/avatars-bottts-sprites";
-import * as initials from "@dicebear/avatars-initials-sprites";
-import * as openPeeps from "@dicebear/open-peeps";
-import { createAvatar } from "@dicebear/avatars";
 import {
   adjectives,
   animals,
@@ -13,15 +6,6 @@ import {
 import { Observable } from "../lib/Observable";
 import { useLocalStorage } from "./theme";
 import { MyDeviceInfo } from "../types";
-
-const avatarStyles: { [key: string]: any } = {
-  adventurer,
-  adventurerNeutral,
-  avataaars,
-  bottts,
-  initials,
-  openPeeps,
-};
 
 export class UISettings {
   private currentSelectedOption: Element;
@@ -83,7 +67,7 @@ export class UISettings {
       useLocalStorage({ name: "avatarStyle", value: style });
       return;
     }
-    const avatarStyle = "adventurerNeutral";
+    const avatarStyle = "adventurer-neutral";
     this.avatarStyle = avatarStyle;
     useLocalStorage({ name: "avatarStyle", value: avatarStyle });
   }
@@ -97,7 +81,7 @@ export class UISettings {
 
     const avatarName = uniqueNamesGenerator({
       dictionaries: [adjectives, animals],
-      separator: " ",
+      separator: "_",
       style: "capital",
     });
     this.avatarName = avatarName;
@@ -109,12 +93,8 @@ export class UISettings {
   }
 
   private generateDeviceInfo() {
-    const style = avatarStyles[this.avatarStyle];
-    const imgURL = createAvatar(style, {
-      seed: this.avatarName,
-      dataUri: true,
-      size: this.avatarStyle == "adventurer" ? 75 : 65,
-    });
+    const size = this.avatarStyle == "adventurer" ? 75 : 65;
+    const imgURL = `https://avatars.dicebear.com/api/${this.avatarStyle}/${this.avatarName}.png?size=${size}`;
     this.settingsObserver.next({ randomName: this.avatarName, imgURL });
   }
 
