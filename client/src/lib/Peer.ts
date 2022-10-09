@@ -6,8 +6,10 @@ export class Peer {
   private onEvent: OnEvent = { onChunk: Function, onConnection: Function };
   private channel: RTCDataChannel;
   private signalCreated: boolean;
+  private closed: boolean;
 
   constructor({ initiator }: Options) {
+    window.addEventListener("unload", () => this.emit("onClose"));
     this.options = { initiator };
     this.peer = new RTCPeerConnection({
       iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
@@ -24,7 +26,7 @@ export class Peer {
 
   private channelOpened(channel: RTCDataChannel) {
     channel.onmessage = (e) => this.onMessage(e.data);
-    channel.onclose = () => this.onEvent["onClose"]();
+    channel.onclose = () => !this.closed && this.onEvent["onClose"]();
     channel.binaryType = "arraybuffer";
     this.channel = channel;
     this.onEvent["onConnection"]();
@@ -37,6 +39,7 @@ export class Peer {
     }
 
     const { msg, data } = JSON.parse(message);
+    if (msg === "onClose") this.closed = true;
     this.onEvent[msg]?.(data);
   }
 
@@ -109,7 +112,7 @@ export class Peer {
   }
 
   isConnectionStable() {
-    return this.channel && this.channel.readyState == "open";
+    return this.channel && this.channel.readyState == "open" && !this.closed;
   }
 
   onClose(fn: () => void) {
