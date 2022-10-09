@@ -18,11 +18,11 @@ export default class ServerConnection {
     };
   }
 
-  on(event: string, fnCallBack: (data: any) => void) {
+  on<Type>(event: string, fnCallBack: (data: Type) => void) {
     this.onEvent[event] = fnCallBack;
   }
 
-  send(data: any) {
+  send<Type>(data: Type) {
     fetch(this.baseUrl + `/peerSignal/${this.id}`, {
       method: "POST",
       cache: "no-cache",

@@ -33,8 +33,10 @@ export default class UIManager {
     server.on("network-devices", (data: Devices) => this.networkDevices(data));
     server.on("new-device", (data: ServerDevice) => this.newDevice(data));
     server.on("peer-signal", (data: ServerSignal) => this.peerSignal(data));
-    server.on("device-left", ({ id }) => this.deviceLeft(id));
-    server.on("my-device", ({ device }) => this.myDevice(device));
+    server.on("device-left", ({ id }: { id: string }) => this.deviceLeft(id));
+    server.on("my-device", ({ device }: { device: Device }) =>
+      this.myDevice(device),
+    );
     this.server = server;
   }
 
@@ -54,8 +56,8 @@ export default class UIManager {
   }
 
   private preventDuplicateOnChange() {
-    const input = this.myDeviceDom.children[2];
-    const selectedLength = this.myDeviceDom.children[4];
+    const input = this.myDeviceDom.children[3];
+    const selectedLength = this.myDeviceDom.children[5];
     input.addEventListener("change", (e) => {
       const input = e.target as HTMLInputElement;
       const files = input.files;
@@ -111,14 +113,14 @@ export default class UIManager {
     };
     const deviceManager = new DeviceManager(config);
     deviceManager.createSignal({
-      send: (signal: SignalType) => this.server.send(signal),
+      send: (signal: SignalType) => this.server.send<SignalType>(signal),
     });
     this.devices.set(id, deviceManager);
   }
 
   private peerSignal({ peer }: ServerSignal) {
     this.devices.get(peer.id)?.updateSignal({
-      send: (signal: SignalType) => this.server.send(signal),
+      send: (signal: SignalType) => this.server.send<SignalType>(signal),
       signal: peer.signal,
     });
   }

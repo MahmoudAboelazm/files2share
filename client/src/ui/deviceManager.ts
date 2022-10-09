@@ -55,14 +55,14 @@ export class DeviceManager {
 
   private listenToPeerEvents() {
     this.peer.onConnection(() =>
-      this.peer.emit("deviceInfo", this.myDeviceInfo),
+      this.peer.emit<MyDeviceInfo>("deviceInfo", this.myDeviceInfo),
+    );
+    this.peer.on<MyDeviceInfo>("deviceInfo", (deviceInfo) =>
+      this.deviceInfo(deviceInfo),
     );
     this.peer.onClose(() => this.destroy());
     this.peer.onChunk((chunk) => this.chunkReceived(chunk));
-    this.peer.on("deviceInfo", (deviceInfo: MyDeviceInfo) =>
-      this.deviceInfo(deviceInfo),
-    );
-    this.peer.on("file-head", (meta) => this.fileHead(meta));
+    this.peer.on<FileMeta>("file-head", (meta) => this.fileHead(meta));
     this.peer.on("partition", () => this.peer.emit("partition-received"));
     this.peer.on("partition-received", () => this.chunker.nextPartition());
     this.peer.on("transfer-completed", () => this.transferCompleted());
@@ -105,7 +105,7 @@ export class DeviceManager {
     });
     chunker.onPartition(() => this.peer.emit("partition"));
     this.chunker = chunker;
-    this.peer.emit("file-head", meta);
+    this.peer.emit<FileMeta>("file-head", meta);
     this.transferring = true;
   }
 

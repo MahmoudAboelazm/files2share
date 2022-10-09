@@ -30,7 +30,7 @@ export class Peer {
     this.onEvent["onConnection"]();
   }
 
-  private onMessage(message: any) {
+  private onMessage(message: string | ArrayBuffer) {
     if (typeof message !== "string") {
       this.onEvent["onChunk"](message);
       return;
@@ -82,16 +82,16 @@ export class Peer {
 
       if (signal.candidate)
         this.peer.addIceCandidate(new RTCIceCandidate(signal.candidate));
-    } catch (error: any) {
+    } catch (error) {
       console.log("setSignal Error: ", error.message);
     }
   }
 
-  on(event: string, fnCallBack: (data: any) => void) {
+  on<Type>(event: string, fnCallBack: (data: Type) => void) {
     this.onEvent[event] = fnCallBack;
   }
 
-  emit(msg: string, data?: any) {
+  emit<Type>(msg: string, data?: Type) {
     if (this.isConnectionStable())
       this.channel.send(JSON.stringify({ msg, data }));
   }
