@@ -26,7 +26,8 @@ export class Peer {
 
   private channelOpened(channel: RTCDataChannel) {
     channel.onmessage = (e) => this.onMessage(e.data);
-    channel.onclose = () => !this.closed && this.onEvent["onClose"]();
+    channel.onclose = () =>
+      !this.closed && ((this.closed = true), this.onEvent["onClose"]());
     channel.binaryType = "arraybuffer";
     this.channel = channel;
     this.onEvent["onConnection"]();
