@@ -3,53 +3,53 @@
   "short_name": "F2share",
   "icons": [
     {
-      "src": "./images/fileshare72x72.png",
+      "src": "./images/files2share72x72.png",
       "sizes": "72x72",
       "type": "image/png"
     },
     {
-      "src": "./images/fileshare96x96.png",
+      "src": "./images/files2share96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "./images/fileshare192x192.png",
+      "src": "./images/files2share192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./images/fileshare512x512.png",
+      "src": "./images/files2share512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "./images/fileshare72x72.png",
+      "src": "./images/files2share72x72-maskable.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "./images/fileshare96x96.png",
+      "src": "./images/files2share96x96-maskable.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "./images/fileshare192x192.png",
+      "src": "./images/files2share192x192-maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
 
     {
-      "src": "./images/fileshare512x512.png",
+      "src": "./images/files2share512x512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
   "display": "minimal-ui",
-  "background_color": "#191924",
+  "background_color": "#5865F2",
   "start_url": "/",
   "scope": "/",
   "theme_color": "#5865F2",

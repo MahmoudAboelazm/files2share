@@ -56,7 +56,9 @@ export default class UIManager {
   }
 
   private preventDuplicateOnChange() {
-    const input = this.myDeviceDom.children[3];
+    const input = this.myDeviceDom.children[3] as HTMLInputElement;
+    const label = this.myDeviceDom.children[4];
+    label.addEventListener("keypress", () => input.click());
     const selectedLength = this.myDeviceDom.children[5];
     input.addEventListener("change", (e) => {
       const input = e.target as HTMLInputElement;
@@ -77,14 +79,16 @@ export default class UIManager {
     const img = this.myDeviceDom.children[0].children[0] as HTMLImageElement;
     const name = this.myDeviceDom.children[2] as HTMLElement;
     const settingsObserver: Observable<MyDeviceInfo> = new Observable();
-    settingsObserver.subscribe(({ randomName, imgURL }: MyDeviceInfo) => {
-      (img.src = imgURL), (name.innerText = randomName);
+    settingsObserver.subscribe(({ randomName, imgURL }) => {
+      (img.src = imgURL),
+        (name.innerHTML = `${randomName}<h6>${device.vendor || device.os} | ${
+          device.browser
+        }</h6>`);
     });
     const uiSettings = new UISettings(settingsObserver);
     uiSettings.init();
 
     this.settingsObserver = settingsObserver;
-    device;
   }
 
   //// network devices connection ////////////////////////////////////////////////

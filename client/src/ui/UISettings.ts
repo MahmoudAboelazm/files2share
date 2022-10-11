@@ -22,26 +22,44 @@ export class UISettings {
     const nameRegenerate = settings.children[1];
     const parentOptions = settings.children[0];
     const options = parentOptions.children[1];
+    const btnSettings = parentOptions.children[0] as HTMLAnchorElement;
 
     parentOptions.addEventListener("click", () => this.optionsToggleHide());
     nameRegenerate.addEventListener("click", () => this.regenerateName());
     this.getDeviceInfo();
-    this.optionsInit(options);
+    this.optionsInit(options, btnSettings);
     this.generateDeviceInfo();
 
     this.parentOptions = parentOptions;
   }
 
-  private optionsInit(options: Element) {
+  private optionsInit(options: Element, btnSettings: HTMLAnchorElement) {
     const optionsLength = options.children.length;
+    let nextFocused: HTMLLIElement;
+    let preFocused: HTMLLIElement;
     for (let i = 0; i < optionsLength; i++) {
-      const el = options.children[i];
+      const el = options.children[i] as HTMLLIElement;
       const dataId = el.getAttribute("dataId");
       if (dataId == this.avatarStyle) {
         el.classList.add("active");
         this.currentSelectedOption = el;
       }
       el.addEventListener("click", () => this.optionOnClick(el));
+      el.onkeyup = (e) => {
+        if (e.key == "ArrowDown") {
+          nextFocused = options.children[i + 1] as HTMLLIElement;
+          preFocused = el;
+          if (nextFocused) return nextFocused.focus();
+          btnSettings.focus();
+        }
+        if (e.key == "Enter") return this.optionOnClick(el);
+        if (e.key == "ArrowUp") {
+          nextFocused = el;
+          preFocused = options.children[i - 1] as HTMLLIElement;
+          if (preFocused) return preFocused.focus();
+          btnSettings.focus();
+        }
+      };
     }
   }
 

@@ -1,5 +1,10 @@
-var CACHE_NAME = "fileshare-cache-v1";
-var urlsToCache = ["index.html", "./bundle.js", "style.css"];
+var CACHE_NAME = "files2share-cache-v1";
+var urlsToCache = [
+  "index.html",
+  "bundle.js",
+  "style.css",
+  "images/files2share72x72.png",
+];
 self.addEventListener("install", function (event) {
   // Perform install steps
   event.waitUntil(

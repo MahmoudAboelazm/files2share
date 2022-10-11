@@ -12,10 +12,17 @@
     <meta name="apple-mobile-web-app-capable" content="no">
     <meta name="apple-mobile-web-app-title" content="Files2share">
     <meta name="description" content="Share images, videos, PDFs with devices on your local network.">
+    <meta name="twitter:description" content="Share images, videos, PDFs with devices on your local network.">
+    <meta name="og:description" content="Share images, videos, PDFs with devices on your local network.">
     <meta name="keywords" content="File, Transfer, Share, Peer2Peer">
-    <link rel="icon" sizes="16x16" href="images/fileshare16x16.png">
-    <link rel="shortcut icon" href="images/fileshare72x72.png">
-    <link rel="apple-touch-icon" href="images/fileshare72x72.png">
+    <meta property="og:title" content="Files2share">
+
+    <meta name="twitter:image" content="https://files2share.netlify.app/images/files2share512x512-maskable.png">
+    <meta property="og:image" content="https://files2share.netlify.app/images/files2share512x512-maskable.png">
+    <link rel="icon" sizes="16x16" href="images/files2share72x72.png">
+    <link rel="shortcut icon" href="images/files2share72x72.png">
+    <link rel="apple-touch-icon" href="images/files2share72x72.png">
+
     <link rel="stylesheet" type="text/css" href="./style.css">
     <link rel="manifest" href="manifest.json">
 </head>
@@ -60,7 +67,7 @@
         </section>
         <section id="my-device" class="my-device">
             <div class="image-container">
-                <img src="./images/fileshare72x72.png" alt="device image" />
+                <img src="./images/files2share72x72.png" alt="device image" />
                 <div class="sonar-container"></div>
                 <div class="scaner-container">
                     <div class="scaner"></div>
@@ -80,12 +87,13 @@
                         </svg>
                     </a>
                     <ul>
-                        <li dataId="adventurer">adventurer</li>
-                        <li dataId="adventurer-neutral">adventurer-neutral</li>
-                        <li dataId="avataaars">avataaars</li>
-                        <li dataId="bottts">bottts</li>
-                        <li dataId="initials">initials</li>
-                        <li dataId="open-peeps">open-peeps</li>
+                        <li dataId="adventurer" tabindex="0" title="Adventurer Style">adventurer</li>
+                        <li dataId="adventurer-neutral" tabindex="0" title="Adventurer Neutral Style">adventurer-neutral
+                        </li>
+                        <li dataId="avataaars" tabindex="0" title="Avataaars Style">avataaars</li>
+                        <li dataId="bottts" tabindex="0" title="Bottts Style">bottts</li>
+                        <li dataId="initials" tabindex="0" title="Initials Style">initials</li>
+                        <li dataId="open-peeps" tabindex="0" title="Open Peeps Style">open-peeps</li>
                     </ul>
                 </div>
                 <a href="#" class="icon-button icon " title="Generate New Name & Image"><svg
@@ -100,7 +108,8 @@
             </div>
             <h4></h4>
             <input type="file" id="pervent-files" multiple="multiple" hidden />
-            <label for="pervent-files" class="btn" title="Prevent transfer files already exist on your device">Prevent
+            <label tabindex="0" for="pervent-files" class="btn"
+                title="Prevent transfer files already exist on your device">Prevent
                 Duplicate</label>
             <h5 title="Prevent duplicate files count">0 Seletcted File</h5>
             <a id="download"></a>

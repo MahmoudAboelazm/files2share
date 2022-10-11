@@ -206,6 +206,9 @@ header {
     position: absolute;
     top: -25%;
     border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 img {
@@ -217,7 +220,8 @@ img {
 
 .my-device h4 {
     position: relative;
-    margin: -1rem 0 1.5rem 0;
+    margin: -1rem 0 1.1rem 0;
+    text-align: center;
 }
 
 .btn {
@@ -238,6 +242,9 @@ h5 {
     opacity: 0.4;
 }
 
+h6{
+    color:var(--icon-color);
+}
 /* ==================== Settings =========================== */
 .settings {
     display: flex;
@@ -276,13 +283,23 @@ h5 {
     padding: .6rem ;
     cursor: pointer;
     font-size: 16px;
+    position: relative;
+    outline: none;
 }
-.options ul li:hover{
-    background-color: var(--hover-color)
+.options ul li:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: currentColor;
+    opacity: 0;
 }
-.options ul li.active{
-    background-color: var(--hover-color)
+.options ul li:hover::before, .options ul li.active:before, .options ul li:focus:before{
+    opacity: .1;
 }
+
 /*************************** Other Peers ********************************/
 
 .other-devices {
@@ -311,12 +328,24 @@ h5 {
     animation: pop 600ms ease-out 1;
     transition: all 0.3s;
 }
-.other-devices .peer-container div:hover{
+.other-devices .peer-container label:focus{
+    outline: none;
+}
+.other-devices .peer-container div:hover, .other-devices .peer-container label:focus div{
     transform: scale(1.1);
+}
+.other-devices .peer-container label:focus img{
+    border: #584f4f40 solid 1px;
+    border-radius: 0;
+    background: var(--bg-light-200);
+    box-shadow: var(--shadow);
+}
+.dark .other-devices .peer-container label:focus img{
+    background: var(--bg-dark-200);
 
 }
 .other-devices h4 {
-    margin-top: .5rem;
+    margin-top: 0.2rem;
 }
 
 @keyframes pop {

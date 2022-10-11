@@ -81,7 +81,7 @@ export class DeviceUI {
     const div = document.createElement("div");
     div.classList.add("peer-container");
     div.innerHTML = `
-    <label >
+    <label tabindex="0" title="Send files to ${this.device.name}">
       <div>
         <img
             src=${this.device.imgURL} />
@@ -89,9 +89,12 @@ export class DeviceUI {
     <input type="file" multiple="multiple" hidden />
   </label>
   <h4>${this.device.name}</h4>
+  <h6>${this.device.vendor || this.device.os} | ${this.device.browser}</h6>
   `;
     otherPeersContainer.append(div);
-    div.children[0].addEventListener("change", (e) => this.onSelectFiles(e));
+    const inputLabel = div.children[0] as HTMLLabelElement;
+    inputLabel.addEventListener("keypress", () => inputLabel.click());
+    inputLabel.addEventListener("change", (e) => this.onSelectFiles(e));
     this.container = div;
   }
 
