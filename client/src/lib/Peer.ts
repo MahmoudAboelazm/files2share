@@ -7,6 +7,7 @@ export class Peer {
   private channel: RTCDataChannel;
   private signalCreated: boolean;
   private closed: boolean;
+  private sdpSent: boolean;
 
   constructor({ initiator }: Options) {
     window.addEventListener("unload", () => this.emit("onClose"));
@@ -60,28 +61,25 @@ export class Peer {
 
   private onIceCandidate(signalCallBack: Signal) {
     this.peer.onicecandidate = (e) => {
-      if (e.candidate && !this.isConnectionStable()) {
+      if (e.candidate) {
         signalCallBack({
-          sdp: this.peer.localDescription,
+          sdp: !this.sdpSent ? this.peer.localDescription : null,
           candidate: e.candidate,
         });
+        this.sdpSent = true;
       }
     };
   }
 
   onSignal(fn: Signal) {
+    if (this.signalCreated) return;
     this.onIceCandidate(fn);
-    if (!this.signalCreated)
-      this.options.initiator ? this.offerSignal() : this.answerSignal();
+    this.options.initiator ? this.offerSignal() : this.answerSignal();
   }
 
   async setSignal(signal: SignalType) {
     try {
-      if (
-        signal.sdp &&
-        this.peer.connectionState !== "connected" &&
-        this.peer.iceConnectionState !== "connected"
-      )
+      if (signal.sdp)
         this.peer.setRemoteDescription(new RTCSessionDescription(signal.sdp));
 
       if (signal.candidate)
