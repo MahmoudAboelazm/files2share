@@ -4,11 +4,11 @@ import { Peer } from "../lib/Peer";
 import { Observable } from "../lib/Observable";
 import {
   Device,
-  CreateSignal,
   FileReceived,
   DeviceManagerOptions,
   FileMeta,
   MyDeviceInfo,
+  SignalType,
 } from "../types";
 import { DeviceUI } from "./DeviceUI";
 
@@ -18,7 +18,6 @@ export class DeviceManager {
   private files: File[] = [];
   private checkDuplicates: Map<string, boolean>;
   private id: string;
-  private initiator: boolean;
   private digister: Digester;
   private chunker: Chunker;
   private busy: boolean;
@@ -49,7 +48,6 @@ export class DeviceManager {
 
   private peerInit(initiator: boolean) {
     this.peer = new Peer({ initiator });
-    this.initiator = initiator;
     this.listenToPeerEvents();
   }
 
@@ -145,25 +143,12 @@ export class DeviceManager {
 
   //////////////// Connect peers ///////////////////
 
-  updateSignal({ send, signal }: CreateSignal) {
-    !this.initiator
-      ? this.createSignal({ send, signal })
-      : this.peer.setSignal(signal!);
+  setSignal(signal: SignalType) {
+    this.peer.setSignal(signal);
   }
 
-  createSignal({ send, signal }: CreateSignal) {
-    if (!this.initiator) {
-      this.peer
-        .setSignal(signal!)
-        .then(() =>
-          this.peer.onSignal((signal) => send({ signal, id: this.id })),
-        );
-      return;
-    }
-
-    this.peer.onSignal((signal) => {
-      send({ signal, id: this.id });
-    });
+  onSignal(send: Function) {
+    this.peer.onSignal((signal) => send({ signal, id: this.id }));
   }
 
   destroy() {

@@ -1,96 +1,116 @@
-import { Options, OnEvent, Signal, SignalType } from "../types";
+import { Options, PeerOnEvent, Signal, SignalType } from "../types";
 
 export class Peer {
-  private options: Options;
+  private initiator: boolean;
   private peer: RTCPeerConnection;
-  private onEvent: OnEvent = { onChunk: Function, onConnection: Function };
+  private event: PeerOnEvent = {
+    onChunk: () => {},
+    onConnection: Function,
+    onSignal: () => {},
+  };
   private channel: RTCDataChannel;
-  private signalCreated: boolean;
   private closed: boolean;
-  private sdpSent: boolean;
+  private candidates: RTCIceCandidate[] = [];
 
   constructor({ initiator }: Options) {
+    this.initiator = initiator;
     window.addEventListener("unload", () => this.emit("onClose"));
-    this.options = { initiator };
+    this.peerConnect();
+  }
+
+  private peerConnect() {
     this.peer = new RTCPeerConnection({
       iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     });
-    initiator
+
+    this.initiator
       ? this.createChannel()
       : (this.peer.ondatachannel = (e) => this.channelOpened(e.channel));
+
+    this.onIceCandidate();
   }
 
   private createChannel() {
     const channel = this.peer.createDataChannel("dataChannel");
     channel.onopen = () => this.channelOpened(channel);
+    this.offerSignal();
   }
 
   private channelOpened(channel: RTCDataChannel) {
     channel.onmessage = (e) => this.onMessage(e.data);
     channel.onclose = () =>
-      !this.closed && ((this.closed = true), this.onEvent["onClose"]());
+      !this.closed && ((this.closed = true), this.event["onClose"]());
     channel.binaryType = "arraybuffer";
     this.channel = channel;
-    this.onEvent["onConnection"]();
+    this.event.onConnection();
   }
 
   private onMessage(message: string | ArrayBuffer) {
     if (typeof message !== "string") {
-      this.onEvent["onChunk"](message);
+      this.event.onChunk(message);
       return;
     }
 
     const { msg, data } = JSON.parse(message);
     if (msg === "onClose") this.closed = true;
-    this.onEvent[msg]?.(data);
+    this.event[msg]?.(data);
+  }
+
+  private addLocalDescription(description: RTCSessionDescriptionInit) {
+    this.peer
+      .setLocalDescription(description)
+      .then(() => this.event.onSignal({ sdp: description }));
   }
 
   private offerSignal() {
-    this.peer
-      .createOffer()
-      .then((offer) => this.peer.setLocalDescription(offer));
-    this.signalCreated = true;
+    this.peer.createOffer().then((offer) => this.addLocalDescription(offer));
   }
 
   private answerSignal() {
-    this.peer
-      .createAnswer()
-      .then((answer) => this.peer.setLocalDescription(answer));
-    this.signalCreated = true;
+    this.peer.createAnswer().then((answer) => this.addLocalDescription(answer));
   }
 
-  private onIceCandidate(signalCallBack: Signal) {
+  private dequeueCandidate() {
+    if (this.candidates.length < 1) return;
+    const candidate = this.candidates.shift();
+    this.peer.addIceCandidate(new RTCIceCandidate(candidate));
+    this.dequeueCandidate();
+  }
+
+  private onIceCandidate() {
     this.peer.onicecandidate = (e) => {
       if (e.candidate) {
-        signalCallBack({
-          sdp: !this.sdpSent ? this.peer.localDescription : null,
-          candidate: e.candidate,
-        });
-        this.sdpSent = true;
+        this.event.onSignal({ candidate: e.candidate });
       }
     };
   }
 
-  onSignal(fn: Signal) {
-    if (this.signalCreated) return;
-    this.onIceCandidate(fn);
-    this.options.initiator ? this.offerSignal() : this.answerSignal();
+  private addIceCandidate(candidate: RTCIceCandidate) {
+    if (!this.peer.currentRemoteDescription) {
+      this.candidates.push(candidate);
+      return;
+    }
+    this.peer.addIceCandidate(new RTCIceCandidate(candidate));
   }
 
-  async setSignal(signal: SignalType) {
-    try {
-      if (signal.sdp)
-        this.peer.setRemoteDescription(new RTCSessionDescription(signal.sdp));
+  private addSdp(sdp: RTCSessionDescriptionInit) {
+    this.peer.setRemoteDescription(new RTCSessionDescription(sdp)).then(() => {
+      if (!this.initiator) this.answerSignal();
+      this.dequeueCandidate();
+    });
+  }
 
-      if (signal.candidate)
-        this.peer.addIceCandidate(new RTCIceCandidate(signal.candidate));
-    } catch (error) {
-      console.log("setSignal Error: ", error.message);
-    }
+  onSignal(fn: Signal) {
+    this.event.onSignal = fn;
+  }
+
+  setSignal(signal: SignalType) {
+    if (signal.sdp) this.addSdp(signal.sdp);
+    if (signal.candidate) this.addIceCandidate(signal.candidate);
   }
 
   on<Type>(event: string, fnCallBack: (data: Type) => void) {
-    this.onEvent[event] = fnCallBack;
+    this.event[event] = fnCallBack;
   }
 
   emit<Type>(msg: string, data?: Type) {
@@ -102,12 +122,12 @@ export class Peer {
     if (this.isConnectionStable()) this.channel.send(chunk);
   }
 
-  onChunk(fnCallBack: (data: Buffer) => void) {
-    this.onEvent["onChunk"] = fnCallBack;
+  onChunk(fnCallBack: (data: ArrayBuffer) => void) {
+    this.event.onChunk = fnCallBack;
   }
 
   onConnection(fnCallBack: () => void) {
-    this.onEvent["onConnection"] = fnCallBack;
+    this.event.onConnection = fnCallBack;
   }
 
   isConnectionStable() {
@@ -115,11 +135,11 @@ export class Peer {
   }
 
   onClose(fn: () => void) {
-    this.onEvent["onClose"] = fn;
+    this.event["onClose"] = fn;
   }
 
   close() {
     if (this.peer) this.peer.close();
-    this.peer = this.onEvent = this.channel = null as any;
+    this.peer = this.event = this.channel = null as any;
   }
 }

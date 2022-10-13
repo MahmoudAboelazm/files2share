@@ -1,19 +1,27 @@
 import { Observable } from "./lib/Observable";
-import { Peer } from "./lib/Peer";
 
 export interface OnEvent {
   [k: string]: Function;
 }
 
-export interface UIPeer {
-  peer: Peer;
+export interface PeerOnEvent {
+  onSignal: Signal;
+  onConnection: Function;
+  onChunk: (data: ArrayBuffer) => void;
+  [k: string]: Function;
 }
 
-export type Signal = (signal: SignalType) => any;
+export type Signal = (signal: SignalType) => void;
 
 export interface SignalType {
-  sdp: RTCSessionDescription | null;
-  candidate: RTCIceCandidate;
+  sdp?: RTCSessionDescriptionInit | null;
+  candidate?: RTCIceCandidate;
+}
+
+export interface CreateDevice {
+  id: string;
+  device: Device;
+  initiator: boolean;
 }
 
 export interface Options {
@@ -35,11 +43,6 @@ export interface ServerDevice {
 }
 export interface Devices {
   devices: ServerDevice[];
-}
-
-export interface CreateSignal {
-  signal?: SignalType;
-  send: Function;
 }
 
 export interface ServerSignal {

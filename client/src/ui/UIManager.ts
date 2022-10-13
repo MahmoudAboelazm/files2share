@@ -3,6 +3,7 @@ import { Observable } from "../lib/Observable";
 import ServerConnection from "../lib/ServerConnection";
 import { addBackground, getTheme } from "./theme";
 import {
+  CreateDevice,
   Device,
   Devices,
   MyDeviceInfo,
@@ -94,21 +95,17 @@ export default class UIManager {
   //// network devices connection ////////////////////////////////////////////////
   private networkDevices({ devices }: Devices) {
     devices.forEach(({ id, device }) => {
-      const deviceManager = new DeviceManager({
-        initiator: false,
-        device,
-        id,
-        duplicates: this.preventDuplicates,
-        busy: this.deviceBusy,
-        myDeviceInfo: this.settingsObserver.value,
-      });
-      this.devices.set(id, deviceManager);
+      this.createDevice({ id, device, initiator: false });
     });
   }
 
   private newDevice({ device, id }: ServerDevice) {
+    this.createDevice({ id, device, initiator: true });
+  }
+
+  private createDevice({ initiator, id, device }: CreateDevice) {
     const config = {
-      initiator: true,
+      initiator,
       device,
       id,
       duplicates: this.preventDuplicates,
@@ -116,17 +113,15 @@ export default class UIManager {
       myDeviceInfo: this.settingsObserver.value,
     };
     const deviceManager = new DeviceManager(config);
-    deviceManager.createSignal({
-      send: (signal: SignalType) => this.server.send<SignalType>(signal),
-    });
+    deviceManager.onSignal((signal: SignalType) =>
+      this.server.send<SignalType>(signal),
+    );
+
     this.devices.set(id, deviceManager);
   }
 
   private peerSignal({ peer }: ServerSignal) {
-    this.devices.get(peer.id)?.updateSignal({
-      send: (signal: SignalType) => this.server.send<SignalType>(signal),
-      signal: peer.signal,
-    });
+    this.devices.get(peer.id)?.setSignal(peer.signal);
   }
 
   private deviceLeft(id: string) {
