@@ -43,13 +43,15 @@ export const addBackground = () => {
 
   const sonarMaxWidth = vh > vw ? vh : vw;
   let currentWidth = 90;
-
+  let opacity = 0.1;
   while (currentWidth < sonarMaxWidth) {
     const span = document.createElement("span");
     span.classList.add("sonar", "center");
     span.style.width = currentWidth + "px";
     span.style.height = currentWidth + "px";
+    span.style.opacity = `${opacity}`;
+    if (opacity < 0.8) opacity += 0.1;
     sonarContainer.appendChild(span);
-    currentWidth += vh > vw ? 100 : 200;
+    currentWidth += vh > vw ? 300 : 400;
   }
 };
