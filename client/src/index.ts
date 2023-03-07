@@ -2,7 +2,8 @@ import UIManager from "./ui/UIManager";
 
 const ui = new UIManager();
 ui.init();
-ui.serverConnect();
+//ui.serverConnect();
+ui.makeQRConnection();
 /**
  * TODOS:
  * 1- Show transfer rate/second

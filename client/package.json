@@ -7,6 +7,7 @@
     "build": "webpack --config webpack.prod.js"
   },
   "devDependencies": {
+    "@types/qrcode": "^1.5.0",
     "@types/streamsaver": "^2.0.1",
     "dotenv-webpack": "^8.0.1",
     "ts-loader": "^9.3.1",
@@ -17,7 +18,10 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "streamsaver": "^2.0.5",
+    "detect-browser": "^5.3.0",
+    "html5-qrcode": "^2.3.7",
+    "qrcode": "^1.5.1",
+    "streamsaver": "^2.0.6",
     "unique-names-generator": "^4.7.1"
   }
 }

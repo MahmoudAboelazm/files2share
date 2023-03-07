@@ -45,6 +45,11 @@ export interface Devices {
   devices: ServerDevice[];
 }
 
+export interface IdSignalType {
+  id: string;
+  signal: SignalType;
+}
+
 export interface ServerSignal {
   peer: {
     id: string;
