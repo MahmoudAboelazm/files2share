@@ -1,6 +1,6 @@
 import { OnEvent } from "../types";
 
-const randomId = () => "id" + Math.random().toString(16).slice(2);
+export const randomId = () => "id" + Math.random().toString(16).slice(2);
 
 export default class ServerConnection {
   private onEvent: OnEvent = {};
