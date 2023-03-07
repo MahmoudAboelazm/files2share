@@ -6,12 +6,13 @@ import {
   CreateDevice,
   Device,
   Devices,
+  IdSignalType,
   MyDeviceInfo,
   ServerDevice,
   ServerSignal,
-  SignalType,
 } from "../types";
 import { UISettings } from "./UISettings";
+import { QRConnection } from "../lib/QRConnection";
 
 export default class UIManager {
   private devices: Map<string, DeviceManager>;
@@ -20,12 +21,35 @@ export default class UIManager {
   private myDeviceDom: Element;
   private deviceBusy: Observable<boolean>;
   private settingsObserver: Observable<MyDeviceInfo>;
+  private QR: QRConnection;
 
   constructor() {
     this.devices = new Map();
     this.myDeviceDom = document.getElementsByClassName("my-device")[0];
     this.preventDuplicates = new Observable();
     this.deviceBusy = new Observable();
+  }
+
+  makeQRConnection() {
+    const QR = new QRConnection();
+    this.QR = QR;
+    QR.init();
+    QR.onSignal((signal) => this.peerSignal(signal));
+    this.myDevice(QR.qrDevice);
+
+    QR.answerPeer(() => {
+      this.devices.delete(QR.id);
+      this.createDevice({
+        initiator: false,
+        id: QR.id,
+        device: QR.qrDevice,
+      });
+    });
+    this.createDevice({
+      initiator: true,
+      id: QR.id,
+      device: QR.qrDevice,
+    });
   }
 
   serverConnect() {
@@ -113,10 +137,13 @@ export default class UIManager {
       myDeviceInfo: this.settingsObserver.value,
     };
     const deviceManager = new DeviceManager(config);
-    deviceManager.onSignal((signal: SignalType) =>
-      this.server.send<SignalType>(signal),
-    );
 
+    deviceManager.onSignal((signal: IdSignalType) => {
+      this.server?.send<IdSignalType>(signal);
+      this.QR?.peerSignal(signal);
+    });
+
+    deviceManager.onPeerConnection(() => this.QR?.peerConnected());
     this.devices.set(id, deviceManager);
   }
 

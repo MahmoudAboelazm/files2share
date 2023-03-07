@@ -25,7 +25,7 @@ export class DeviceManager {
   private transferring: boolean;
   private myDeviceInfo: MyDeviceInfo;
   private device: Device;
-
+  private connectionNotify: () => void;
   constructor({
     initiator,
     duplicates,
@@ -52,10 +52,13 @@ export class DeviceManager {
   }
 
   private listenToPeerEvents() {
-    this.peer.onConnection(() =>
-      this.peer.emit<MyDeviceInfo>("deviceInfo", this.myDeviceInfo),
-    );
-    this.peer.on<MyDeviceInfo>("deviceInfo", (deviceInfo) =>
+    this.peer.onConnection(() => {
+      this.device.imgURL = this.myDeviceInfo.imgURL;
+      this.device.name = this.myDeviceInfo.randomName;
+      this.peer.emit<Device>("deviceInfo", this.device);
+      if (this.connectionNotify) this.connectionNotify();
+    });
+    this.peer.on<Device>("deviceInfo", (deviceInfo) =>
       this.deviceInfo(deviceInfo),
     );
     this.peer.onClose(() => this.destroy());
@@ -66,9 +69,8 @@ export class DeviceManager {
     this.peer.on("transfer-completed", () => this.transferCompleted());
   }
 
-  private deviceInfo(deviceInfo: MyDeviceInfo) {
-    this.device.imgURL = deviceInfo.imgURL;
-    this.device.name = deviceInfo.randomName;
+  private deviceInfo(device: Device) {
+    this.device = device;
     this.deviceInit(this.device);
     this.deviceUI.show();
   }
@@ -142,6 +144,10 @@ export class DeviceManager {
   }
 
   //////////////// Connect peers ///////////////////
+
+  onPeerConnection(fn: () => void) {
+    this.connectionNotify = fn;
+  }
 
   setSignal(signal: SignalType) {
     this.peer.setSignal(signal);
