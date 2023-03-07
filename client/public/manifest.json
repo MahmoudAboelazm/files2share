@@ -23,12 +23,6 @@
       "type": "image/png"
     },
     {
-      "src": "./images/files2share72x72-maskable.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
       "src": "./images/files2share96x96-maskable.png",
       "sizes": "96x96",
       "type": "image/png",
