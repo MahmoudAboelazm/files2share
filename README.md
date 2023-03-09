@@ -1,8 +1,13 @@
 # Files2share
 
 <a href="https://files2share.netlify.app/" target="_blank">Files2share</a> is a
-web app for sharing files between the devices on your local network without
-uploading them to any server, it's peer-to-peer using WebRTC.
+web app for sharing files between the devices on your local network.
+
+### Update:
+
+The project uses QR Code to connect two devices, nothing goes to the server, and
+all the connections are made on the client side by scanning the QR Code on both
+devices.
 
 > Inspired by
 > <a href="https://github.com/RobinLinus/snapdrop" target="_blank">Snapdrop</a>
